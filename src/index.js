@@ -1,13 +1,12 @@
 import * as THREE from 'three';
 import * as FXRand from 'fxhash_lib/random.js'
 import * as core from "fxhash_lib/core";
-import {cam, renderer, scene, settings, options, features} from "fxhash_lib/core";
+import {cam, renderer, scene, settings, options, features, compositions, palettes} from "fxhash_lib/core";
 import * as dev from "fxhash_lib/dev";
 import * as effects from "fxhash_lib/effects";
 //import * as lights from "fxhash_lib/lights";
 import * as css2D from "fxhash_lib/css2D";
 import {devMode, effectOptions, lightOptions} from "./config"
-import {createGUI} from "./gui";
 import * as fluid from "fxhash_lib/fluid";
 import * as mats from "fxhash_lib/materials";
 import {MaterialFBO} from "fxhash_lib/postprocessing/MaterialFBO";
@@ -21,8 +20,24 @@ setup();
 function setup() {
   if (devMode) {
     dev.initGui(settings.name);
+
     //dev.initSettings(settings);
-    createGUI(dev.gui);
+
+    const folder = fluid.createGUI(dev.gui);
+    folder.add(options, 'minStrokes', 1, 22, 1);
+    folder.add(options, 'maxStrokes', 1, 22, 1);
+    folder.add(options, 'strokesRel', ['same', 'mirror', 'mirrorX', 'mirrorY', 'mirrorRand', 'random']);
+    folder.add(options, 'minSpeed', 0.001, 0.01, 0.001).listen();
+    folder.add(options, 'maxSpeed', 0.01, 0.1, 0.001).listen();
+    if (options.hasOwnProperty('speedMult')) {
+      folder.add(options, 'speedMult', 0.1, 10, 0.1).listen();
+    }
+    if (options.hasOwnProperty('maxIterations')) {
+      folder.add(options, 'maxIterations', 1, 20, 1);
+    }
+
+    dev.createCheckBoxGui(compositions, 'Compositions');
+    dev.createCheckBoxGui(palettes, 'Palettes');
   }
 
   initShared();
