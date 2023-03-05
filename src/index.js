@@ -80,7 +80,6 @@ function setup() {
 function createScene() {
   switch (comp) {
     case 'box':
-      scene.background = fluid.colors[0];
       createBoxComp();
       break;
     case 'random':
@@ -88,31 +87,24 @@ function createScene() {
     case 'mouse':
     default:
       createDefaultComp();
-      // if (!options.snapOverlay && palette !== 'Black&White') {
-      //   scene.background = fluid.colors[0];
-      // }
-      fluid.createSnapOverlay();
-      if (options.maxChanges > 0) {
-        fluid.scheduleChange();
-      }
       break;
   }
   scene.add(debug);
 }
 
 function createDefaultComp() {
-  // const mat = new THREE.MeshLambertMaterial({color: fluid.colors[0], blending: THREE.CustomBlending});
-  // // const mat = new THREE.MeshBasicMaterial({color: fluid.colors[0], blending: THREE.CustomBlending});
-  // const box = new THREE.Mesh(new THREE.BoxGeometry(500, 500, 500), mat);
-  // box.rotation.set(90, 0, 180);
-  // scene.add(box);
-
-  for (let i=0; i<features.layers; i++) {
-    fluid.createLayer();
+  fluid.createLayers();
+  // if (!options.snapOverlay && palette !== 'Black&White') {
+  //   scene.background = fluid.colors[0];
+  // }
+  fluid.createSnapOverlay();
+  if (options.maxChanges > 0) {
+    fluid.scheduleChange();
   }
 }
 
 function createBoxComp() {
+  scene.background = fluid.colors[0];
   core.initControls(cam);
 
   fluid.createLayer();
