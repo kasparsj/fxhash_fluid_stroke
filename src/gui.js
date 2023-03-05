@@ -1,20 +1,19 @@
-import {compositions, layerOptions, options, palettes} from "./config";
+import {compositions, options, palettes} from "fxhash_lib/core";
 import * as dev from "fxhash_lib/dev";
-import {layers, debug, vars, changeLayerOptions, updateLayer, viewFragmentShaders} from "./common";
-import * as fluidView from "fxhash_lib/shaders/fluid/view";
+import * as fluid from "fxhash_lib/fluid";
 
 export const createGUI = (gui) => {
     gui.remember(options);
     const onChange = () => {
         debug.visible = options.showDebug;
         if (options.hasOwnProperty('snapOverlay')) {
-            vars.snapOverlay.mesh.visible = options.snapOverlay;
+            fluid.vars.snapOverlay.mesh.visible = options.snapOverlay;
         }
         if (options.hasOwnProperty('snapBlending')) {
-            vars.snapOverlay.mesh.material.blending = options.snapBlending;
+            fluid.vars.snapOverlay.mesh.material.blending = options.snapBlending;
         }
         if (options.hasOwnProperty('snapOpacity')) {
-            vars.snapOverlay.mesh.material.opacity = options.snapOpacity;
+            fluid.vars.snapOverlay.mesh.material.opacity = options.snapOpacity;
         }
     }
 
@@ -61,33 +60,4 @@ export const createGUI = (gui) => {
 
     dev.createCheckBoxGui(compositions, 'Compositions');
     dev.createCheckBoxGui(palettes, 'Palettes');
-}
-
-export const createLayerGUI = (gui, i) => {
-    const onChange = () => {
-        updateLayer(i);
-    }
-    const folder = gui.addFolder('Layer '+i);
-    const methods = {
-        randomize: function() {
-            changeLayerOptions(layers[i], true);
-        }
-    };
-    folder.add(layerOptions[i], 'visible', 0, 5, 1).listen().onChange(onChange);
-    folder.add(layerOptions[i], 'blendModePass', 0, 5, 1).listen().onChange(onChange);
-    folder.add(layerOptions[i], 'blendModeView', 0, 5, 1).listen().onChange(onChange);
-    if (layerOptions[i].hasOwnProperty('fluidZoom')) {
-        folder.add(layerOptions[i], 'fluidZoom', 0.1, 20, 0.1).listen().onChange(onChange);
-    }
-    if (layerOptions[i].hasOwnProperty('noiseZoom')) {
-        folder.add(layerOptions[i], 'noiseZoom', 1, 2000, 1).listen().onChange(onChange);
-    }
-    folder.add(layerOptions[i], 'dt', options.minDt, options.maxDt, 0.01).listen().onChange(onChange);
-    folder.add(layerOptions[i], 'K', 0, 1, 0.01).listen().onChange(onChange);
-    folder.add(layerOptions[i], 'nu', 0, 1, 0.01).listen().onChange(onChange);
-    folder.add(layerOptions[i], 'kappa', 0, 1, 0.01).listen().onChange(onChange);
-    folder.add(layerOptions[i], 'viewShader', viewFragmentShaders).listen().onChange(onChange);
-    folder.addColor(layerOptions[i], 'color').listen().onChange(onChange);
-    folder.add(layerOptions[i], 'saturation', 0.01, 1, 0.01).listen().onChange(onChange);
-    folder.add(methods, 'randomize');
 }

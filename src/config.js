@@ -1,15 +1,15 @@
-import * as FXRand from "fxhash_lib/random";
+import {settings, options, compositions, palettes} from "../../fxhash_lib/core";
 
-const name = 'fluid';
+const name = 'fluid_stroke';
 
 export const devMode = true;
 
-export const settings = {
+Object.assign(settings, {
     name,
     cam: 'orthographic',
-};
+});
 
-export const options = {
+Object.assign(options, {
     minLayers: 2,
     maxLayers: 2,
     opacity: 1.0,
@@ -29,24 +29,22 @@ export const options = {
     snapOpacity: 3,
     maxChanges: 0,
     showDebug: false,
-};
+});
 
-export const compositions = {
-    pnoise: false,
-    snoise: true,
+Object.assign(compositions, {
     'random': false,
-    center: false,
+    center: true,
     mouse: false,
     box: false,
-};
+});
 
-export const palettes = {
+Object.assign(palettes, {
     'Black&White': false,
     'Mono': false,
     'Analogous': false,
     'Complementary': false,
     'randomColor': true,
-};
+});
 
 export const layerOptions = [];
 
@@ -89,19 +87,3 @@ export const effectOptions = {
     //colorify: false,
     //pixelate: false,
 };
-
-export const chooseComposition = () => {
-    const includedComps = Object.keys(compositions).filter((comp) => {
-        return compositions[comp] === true;
-    });
-    const composition = FXRand.choice(includedComps);
-    settings.saveName = name + '_' + composition;
-    return composition;
-}
-
-export const choosePalette = () => {
-    const includedPalettes = Object.keys(palettes).filter((palette) => {
-        return palettes[palette] === true;
-    });
-    return FXRand.choice(includedPalettes);
-}
