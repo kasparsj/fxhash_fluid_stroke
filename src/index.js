@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import * as FXRand from 'fxhash_lib/random.js'
 import * as core from "fxhash_lib/core";
-import {cam, options, renderer, scene, settings} from "fxhash_lib/core";
+import {cam, renderer, scene, settings, options, features} from "fxhash_lib/core";
 import * as dev from "fxhash_lib/dev";
 import * as effects from "fxhash_lib/effects";
 //import * as lights from "fxhash_lib/lights";
@@ -92,7 +92,7 @@ function createDefaultComp() {
   // box.rotation.set(90, 0, 180);
   // scene.add(box);
 
-  for (let i=0; i<fluid.features.layers; i++) {
+  for (let i=0; i<features.layers; i++) {
     fluid.createLayer();
   }
 }

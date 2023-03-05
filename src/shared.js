@@ -1,11 +1,13 @@
 import * as THREE from 'three';
 import * as FXRand from "fxhash_lib/random";
-import {chooseComposition, options} from "fxhash_lib/core";
+import {chooseComposition, options, features} from "fxhash_lib/core";
 
 let comp, strokesPerLayer, debug;
 
 function initShared() {
     comp = chooseComposition();
+    features.composition = comp;
+
     strokesPerLayer = FXRand.int(options.minStrokes, options.maxStrokes);
 
     debug = new THREE.Group();
